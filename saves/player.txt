@@ -1,0 +1,3 @@
+nickname=aaa
+shipsSunkByHuman=0
+shipsSunkByMachine=0

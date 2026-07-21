@@ -2,13 +2,13 @@ package com.example.miniproyecto_batalla_naval.controller;
 
 import com.example.miniproyecto_batalla_naval.controller.adapter.CellInteractionListener;
 import com.example.miniproyecto_batalla_naval.exceptions.CellAlreadyShotException;
+import com.example.miniproyecto_batalla_naval.model.GameModel;
 import com.example.miniproyecto_batalla_naval.model.board.Board;
 import com.example.miniproyecto_batalla_naval.model.board.Cell;
 import com.example.miniproyecto_batalla_naval.model.board.CellState;
-import com.example.miniproyecto_batalla_naval.model.GameModel;
-import com.example.miniproyecto_batalla_naval.model.ships.Ship;
 import com.example.miniproyecto_batalla_naval.model.board.ShotResult;
 import com.example.miniproyecto_batalla_naval.model.interfaces.BoardListener;
+import com.example.miniproyecto_batalla_naval.model.ships.Ship;
 import com.example.miniproyecto_batalla_naval.persistence.GameSerializer;
 import com.example.miniproyecto_batalla_naval.persistence.PlayerFileManager;
 import com.example.miniproyecto_batalla_naval.util.BoardGridBuilder;
@@ -245,10 +245,6 @@ public class GameController implements CellInteractionListener, BoardListener {
         popup.show();
     }
 
-    /**
-     * No-op listener used for boards that should not react to clicks
-     * (the position board, and the verification popup).
-     */
     private static class ReadOnlyListener implements CellInteractionListener {
         @Override
         public void onCellLeftClick(int row, int column) {

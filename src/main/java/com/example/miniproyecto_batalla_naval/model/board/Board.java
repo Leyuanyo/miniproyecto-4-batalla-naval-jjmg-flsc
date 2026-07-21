@@ -1,10 +1,12 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.board;
 
 import com.example.miniproyecto_batalla_naval.exceptions.CellAlreadyShotException;
 import com.example.miniproyecto_batalla_naval.exceptions.InvalidShipPlacementException;
+import com.example.miniproyecto_batalla_naval.model.ships.Orientation;
 import com.example.miniproyecto_batalla_naval.model.interfaces.BoardListener;
 import com.example.miniproyecto_batalla_naval.model.interfaces.Placeable;
 import com.example.miniproyecto_batalla_naval.model.interfaces.Shootable;
+import com.example.miniproyecto_batalla_naval.model.ships.Ship;
 
 import java.io.Serializable;
 import java.util.ArrayList;

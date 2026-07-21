@@ -1,4 +1,6 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.player;
+
+import com.example.miniproyecto_batalla_naval.model.board.Board;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.ships;
 
 public enum ShipType {
     AIRCRAFT_CARRIER(4),

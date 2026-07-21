@@ -1,4 +1,4 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.board;
 
 public enum ShotResult {
     WATER,

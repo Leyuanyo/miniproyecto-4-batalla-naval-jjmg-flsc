@@ -1,5 +1,8 @@
 package com.example.miniproyecto_batalla_naval.model;
 
+import com.example.miniproyecto_batalla_naval.model.player.Machine;
+import com.example.miniproyecto_batalla_naval.model.player.Player;
+
 import java.io.Serializable;
 
 public class GameModel implements Serializable {

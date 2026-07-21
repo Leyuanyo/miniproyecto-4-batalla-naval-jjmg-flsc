@@ -1,4 +1,7 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.ships;
+
+import com.example.miniproyecto_batalla_naval.model.board.Cell;
+import com.example.miniproyecto_batalla_naval.model.board.CellState;
 
 import java.io.Serializable;
 import java.util.ArrayList;

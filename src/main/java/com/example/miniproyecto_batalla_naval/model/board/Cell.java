@@ -1,4 +1,6 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.board;
+
+import com.example.miniproyecto_batalla_naval.model.ships.Ship;
 
 import java.io.Serializable;
 

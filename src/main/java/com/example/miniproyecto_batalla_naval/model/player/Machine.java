@@ -1,5 +1,8 @@
-package com.example.miniproyecto_batalla_naval.model;
+package com.example.miniproyecto_batalla_naval.model.player;
 
+import com.example.miniproyecto_batalla_naval.model.board.Board;
+import com.example.miniproyecto_batalla_naval.model.board.Cell;
+import com.example.miniproyecto_batalla_naval.model.board.ShotResult;
 import com.example.miniproyecto_batalla_naval.model.interfaces.ShotStrategy;
 import java.io.Serializable;
 

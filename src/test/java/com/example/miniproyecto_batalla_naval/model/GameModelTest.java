@@ -24,6 +24,15 @@ class GameModelTest {
     }
 
     @Test
+    void gameIsNotOverWithFreshBoards() {
+        Player human = new Player("Juan", new Board());
+        Machine machine = new Machine(new RandomShotStrategy());
+        GameModel model = new GameModel(human, machine);
+
+        assertFalse(model.isGameOver());
+    }
+
+    @Test
     void turnCanBeToggled() {
         GameModel model = new GameModel(new Player("Juan"), new Machine(new RandomShotStrategy()));
 

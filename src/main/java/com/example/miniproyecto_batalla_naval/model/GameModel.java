@@ -34,6 +34,9 @@ public class GameModel implements Serializable {
     }
 
     public boolean isGameOver() {
-        return human.getBoard().isFleetSunk() || machine.getBoard().isFleetSunk();
+        boolean humanLost = !human.getBoard().getFleet().isEmpty() && human.getBoard().isFleetSunk();
+        boolean machineLost = !machine.getBoard().getFleet().isEmpty() && machine.getBoard().isFleetSunk();
+
+        return humanLost || machineLost;
     }
 }

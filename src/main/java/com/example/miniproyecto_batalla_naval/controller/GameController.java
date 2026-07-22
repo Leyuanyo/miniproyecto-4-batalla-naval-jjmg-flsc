@@ -54,11 +54,17 @@ public class GameController implements CellInteractionListener, BoardListener {
         setupBoards();
         repaintFromModel();
         updateTurnLabel();
+
+        if (!model.isHumanTurn()) {
+            messageLabel.setText("Reanudando turno de la maquina...");
+            runMachineTurn();
+        }
     }
 
     private void setupBoards() {
         positionCells = BoardGridBuilder.build(positionBoardGrid, new ReadOnlyListener());
         mainCells = BoardGridBuilder.build(mainBoardGrid, this);
+
         model.getHuman().getBoard().addListener(this);
     }
 
@@ -89,14 +95,15 @@ public class GameController implements CellInteractionListener, BoardListener {
             }
 
             applyMessage(result, true);
-            autosave();
 
             if (result == ShotResult.WATER) {
                 model.setHumanTurn(false);
                 updateTurnLabel();
+                autosave();
                 runMachineTurn();
             } else {
                 updateTurnLabel();
+                autosave();
             }
         } catch (CellAlreadyShotException e) {
             messageLabel.setText("Ya disparaste ahi. Elige otra celda.");
@@ -118,15 +125,17 @@ public class GameController implements CellInteractionListener, BoardListener {
     private void onMachineShotResolved(int row, int column, ShotResult result) {
         Platform.runLater(() -> {
             applyMessage(result, false);
-            autosave();
 
             if (result == ShotResult.WATER) {
                 model.setHumanTurn(true);
                 updateTurnLabel();
+                autosave();
             } else if (result == ShotResult.GAME_OVER) {
                 updateTurnLabel();
+                autosave();
             } else {
                 updateTurnLabel();
+                autosave();
                 runMachineTurn();
             }
         });

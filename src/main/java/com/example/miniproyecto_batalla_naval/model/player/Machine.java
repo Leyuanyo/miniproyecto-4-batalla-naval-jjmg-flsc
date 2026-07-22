@@ -4,6 +4,8 @@ import com.example.miniproyecto_batalla_naval.model.board.Board;
 import com.example.miniproyecto_batalla_naval.model.board.Cell;
 import com.example.miniproyecto_batalla_naval.model.board.ShotResult;
 import com.example.miniproyecto_batalla_naval.model.interfaces.ShotStrategy;
+import com.example.miniproyecto_batalla_naval.patterns.SmartShotStrategy;
+
 import java.io.Serializable;
 
 public class Machine extends Player implements Serializable {
@@ -20,6 +22,9 @@ public class Machine extends Player implements Serializable {
     }
 
     public Cell chooseNextShot(Board enemyBoard) {
+        if (this.shotStrategy == null) {
+            this.shotStrategy = new SmartShotStrategy();
+        }
         return shotStrategy.nextShot(enemyBoard);
     }
 

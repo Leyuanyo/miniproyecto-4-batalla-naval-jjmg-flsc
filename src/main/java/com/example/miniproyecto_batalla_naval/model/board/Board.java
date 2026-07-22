@@ -108,6 +108,10 @@ public class Board implements Serializable, Placeable, Shootable {
     }
 
     public boolean isFleetSunk() {
+        if (fleet.isEmpty()) {
+            return false;
+        }
+
         for (Ship ship : fleet) {
             if (!ship.isSunk()) {
                 return false;

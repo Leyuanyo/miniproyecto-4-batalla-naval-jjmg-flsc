@@ -207,4 +207,16 @@ public final class ShipShapeFactory {
         return new Group(c,l1,l2);
     }
 
+    public static Rectangle createGhostCell(boolean valid) {
+        Rectangle rectangle = new Rectangle(CELL_SIZE - 4, CELL_SIZE - 4);
+        rectangle.setArcWidth(10);
+        rectangle.setArcHeight(10);
+        rectangle.setX(2);
+        rectangle.setY(2);
+        rectangle.setFill(valid ? Color.rgb(46, 204, 113, 0.55) : Color.rgb(231, 76, 60, 0.55));
+        rectangle.setStroke(valid ? Color.rgb(39, 174, 96, 0.9) : Color.rgb(192, 57, 43, 0.9));
+        rectangle.setStrokeWidth(2);
+        return rectangle;
+    }
+
 }

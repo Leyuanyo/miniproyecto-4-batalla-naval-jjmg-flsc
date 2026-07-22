@@ -22,7 +22,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
+import com.example.miniproyecto_batalla_naval.model.board.CellState;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class PlacementController implements CellInteractionListener {
@@ -44,12 +47,16 @@ public class PlacementController implements CellInteractionListener {
     private StackPane[][] cellPanes;
     private final Queue<ShipType> pendingShips = new LinkedList<>();
     private Orientation currentOrientation = Orientation.HORIZONTAL;
+    private final List<StackPane> ghostPanes = new ArrayList<>();
+    private int lastHoverRow = -1;
+    private int lastHoverColumn = -1;
 
     public void startNewGame(String nickname) {
         this.nickname = nickname;
         this.board = new Board();
         loadPendingShips();
         cellPanes = BoardGridBuilder.build(positionBoardGrid, this);
+        attachHoverPreview();
         updateCurrentShipLabel();
         startGameButton.setDisable(true);
         instructionsLabel.setText("Click izquierdo: coloca. Click derecho: rota. Empieza por el portaaviones.");
@@ -74,6 +81,9 @@ public class PlacementController implements CellInteractionListener {
         currentOrientation = currentOrientation == Orientation.HORIZONTAL
                 ? Orientation.VERTICAL
                 : Orientation.HORIZONTAL;
+        if (lastHoverRow >= 0) {
+            showGhostShip(lastHoverRow, lastHoverColumn);
+        }
     }
 
     @FXML
@@ -102,6 +112,7 @@ public class PlacementController implements CellInteractionListener {
         if (nextType == null) {
             return;
         }
+        clearGhostShip();
         Ship ship = ShipFactory.create(nextType);
         try {
             board.placeShip(ship, row, column, currentOrientation);
@@ -146,6 +157,60 @@ public class PlacementController implements CellInteractionListener {
                             )
                     );
         }
+    }
+
+    private void attachHoverPreview() {
+        positionBoardGrid.setOnMouseMoved(event -> {
+            int column = (int) (event.getX() / ShipShapeFactory.CELL_SIZE);
+            int row = (int) (event.getY() / ShipShapeFactory.CELL_SIZE);
+            if (row >= 0 && row < Board.SIZE && column >= 0 && column < Board.SIZE) {
+                showGhostShip(row, column);
+            }
+        });
+        positionBoardGrid.setOnMouseExited(event -> clearGhostShip());
+    }
+
+    private void showGhostShip(int anchorRow, int anchorColumn) {
+        lastHoverRow = anchorRow;
+        lastHoverColumn = anchorColumn;
+        clearGhostShip();
+
+        ShipType nextType = pendingShips.peek();
+        if (nextType == null) {
+            return;
+        }
+
+        boolean valid = true;
+        List<int[]> cellsInBounds = new ArrayList<>();
+
+        for (int i = 0; i < nextType.getSize(); i++) {
+            int r = anchorRow + (currentOrientation == Orientation.VERTICAL ? i : 0);
+            int c = anchorColumn + (currentOrientation == Orientation.HORIZONTAL ? i : 0);
+
+            if (r < 0 || r >= Board.SIZE || c < 0 || c >= Board.SIZE) {
+                valid = false;
+                continue;
+            }
+            if (board.getCell(r, c).getState() != CellState.EMPTY) {
+                valid = false;
+            }
+            cellsInBounds.add(new int[]{r, c});
+        }
+
+        for (int[] rc : cellsInBounds) {
+            StackPane pane = cellPanes[rc[0]][rc[1]];
+            pane.getChildren().add(ShipShapeFactory.createGhostCell(valid));
+            ghostPanes.add(pane);
+        }
+    }
+
+    private void clearGhostShip() {
+        for (StackPane pane : ghostPanes) {
+            if (!pane.getChildren().isEmpty()) {
+                pane.getChildren().remove(pane.getChildren().size() - 1);
+            }
+        }
+        ghostPanes.clear();
     }
 
     private void updateCurrentShipLabel() {

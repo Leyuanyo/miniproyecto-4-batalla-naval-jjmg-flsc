@@ -80,7 +80,11 @@ public class GameController implements CellInteractionListener, BoardListener {
 
     @Override
     public void onCellLeftClick(int row, int column) {
-        if (model == null || !model.isHumanTurn()) {
+
+        if (model == null
+                || !model.isHumanTurn()
+                || model.getMachine().getBoard().isFleetSunk()
+                || model.getHuman().getBoard().isFleetSunk()) {
             return;
         }
         try {
@@ -153,7 +157,16 @@ public class GameController implements CellInteractionListener, BoardListener {
                 messageLabel.setText(shotByHuman ? "Hundiste un barco! Dispara otra vez." : "La maquina te hundio un barco.");
                 break;
             case GAME_OVER:
-                messageLabel.setText(shotByHuman ? "Ganaste! Hundiste toda la flota." : "La maquina hundio tu flota. Perdiste.");
+
+                messageLabel.setText(
+                        shotByHuman
+                                ? "Ganaste! Hundiste toda la flota."
+                                : "La maquina hundio tu flota. Perdiste."
+                );
+
+                mainBoardGrid.setDisable(true);
+                positionBoardGrid.setDisable(true);
+
                 break;
         }
     }

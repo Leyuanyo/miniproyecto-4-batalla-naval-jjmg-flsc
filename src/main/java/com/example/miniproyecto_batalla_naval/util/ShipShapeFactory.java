@@ -1,7 +1,6 @@
 package com.example.miniproyecto_batalla_naval.util;
 
 import com.example.miniproyecto_batalla_naval.model.ships.Orientation;
-import com.example.miniproyecto_batalla_naval.model.ships.ShipType;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -13,68 +12,199 @@ public final class ShipShapeFactory {
 
     public static final double CELL_SIZE = 36;
 
+    public enum SegmentType {
+        SINGLE,
+        HEAD,
+        BODY,
+        TAIL
+    }
+
     private ShipShapeFactory() {
     }
 
-    public static Group createShip(ShipType type, Orientation orientation) {
-        double length = type.getSize() * CELL_SIZE;
+    public static Group createShipSegment(
+            SegmentType segment,
+            Orientation orientation) {
 
-        Rectangle body = new Rectangle(length, CELL_SIZE);
-        body.setArcWidth(14);
-        body.setArcHeight(14);
-        body.setFill(Color.SLATEGRAY);
-        body.setStroke(Color.DARKSLATEGRAY);
+        Group group = new Group();
 
-        Polygon bow = new Polygon(
-                0, 0,
-                CELL_SIZE * 0.4, CELL_SIZE / 2.0,
-                0, CELL_SIZE
-        );
-        bow.setFill(Color.DARKSLATEGRAY);
+        boolean horizontal = orientation == Orientation.HORIZONTAL;
 
-        Group group = new Group(body, bow);
-        if (orientation == Orientation.VERTICAL) {
-            group.setRotate(90);
+        switch (segment) {
+
+            case SINGLE -> {
+
+                Rectangle r = new Rectangle(24,24);
+
+                r.setArcWidth(12);
+                r.setArcHeight(12);
+
+                r.setX(6);
+                r.setY(6);
+
+                r.setFill(Color.SLATEGRAY);
+                r.setStroke(Color.DARKSLATEGRAY);
+
+                group.getChildren().add(r);
+            }
+
+            case BODY -> {
+
+                Rectangle body;
+
+                if (horizontal) {
+                    body = new Rectangle(32,18);
+                    body.setX(2);
+                    body.setY(9);
+                } else {
+                    body = new Rectangle(18,32);
+                    body.setX(9);
+                    body.setY(2);
+                }
+
+                body.setArcWidth(10);
+                body.setArcHeight(10);
+                body.setFill(Color.SLATEGRAY);
+                body.setStroke(Color.DARKSLATEGRAY);
+
+                group.getChildren().add(body);
+            }
+
+            case HEAD -> {
+
+                if (horizontal) {
+
+                    Rectangle body = new Rectangle(24,18);
+                    body.setX(10);
+                    body.setY(9);
+
+                    Polygon tip = new Polygon(
+                            2.0,18.0,
+                            10.0,9.0,
+                            10.0,27.0
+                    );
+
+                    body.setFill(Color.SLATEGRAY);
+                    body.setStroke(Color.DARKSLATEGRAY);
+                    tip.setFill(Color.SLATEGRAY);
+                    tip.setStroke(Color.DARKSLATEGRAY);
+
+                    group.getChildren().addAll(body,tip);
+
+                } else {
+
+                    Rectangle body = new Rectangle(18,24);
+                    body.setX(9);
+                    body.setY(10);
+
+                    Polygon tip = new Polygon(
+                            18.0,2.0,
+                            9.0,10.0,
+                            27.0,10.0
+                    );
+
+                    body.setFill(Color.SLATEGRAY);
+                    body.setStroke(Color.DARKSLATEGRAY);
+                    tip.setFill(Color.SLATEGRAY);
+                    tip.setStroke(Color.DARKSLATEGRAY);
+
+                    group.getChildren().addAll(body,tip);
+                }
+            }
+
+            case TAIL -> {
+
+                if (horizontal) {
+
+                    Rectangle body = new Rectangle(24,18);
+                    body.setX(2);
+                    body.setY(9);
+
+                    Polygon tip = new Polygon(
+                            34.0,9.0,
+                            34.0,27.0,
+                            26.0,18.0
+                    );
+
+                    body.setFill(Color.SLATEGRAY);
+                    body.setStroke(Color.DARKSLATEGRAY);
+                    tip.setFill(Color.SLATEGRAY);
+                    tip.setStroke(Color.DARKSLATEGRAY);
+
+                    group.getChildren().addAll(body,tip);
+
+                } else {
+
+                    Rectangle body = new Rectangle(18,24);
+                    body.setX(9);
+                    body.setY(2);
+
+                    Polygon tip = new Polygon(
+                            9.0,26.0,
+                            27.0,26.0,
+                            18.0,34.0
+                    );
+
+                    body.setFill(Color.SLATEGRAY);
+                    body.setStroke(Color.DARKSLATEGRAY);
+                    tip.setFill(Color.SLATEGRAY);
+                    tip.setStroke(Color.DARKSLATEGRAY);
+
+                    group.getChildren().addAll(body,tip);
+                }
+            }
         }
+
         return group;
     }
 
     public static Group createWaterMark() {
-        Line line1 = new Line(6, 6, CELL_SIZE - 6, CELL_SIZE - 6);
-        Line line2 = new Line(CELL_SIZE - 6, 6, 6, CELL_SIZE - 6);
-        line1.setStroke(Color.CRIMSON);
-        line2.setStroke(Color.CRIMSON);
-        line1.setStrokeWidth(3);
-        line2.setStrokeWidth(3);
-        return new Group(line1, line2);
+
+        Line l1 = new Line(6,6,CELL_SIZE-6,CELL_SIZE-6);
+        Line l2 = new Line(CELL_SIZE-6,6,6,CELL_SIZE-6);
+
+        l1.setStroke(Color.CRIMSON);
+        l2.setStroke(Color.CRIMSON);
+
+        l1.setStrokeWidth(3);
+        l2.setStrokeWidth(3);
+
+        return new Group(l1,l2);
     }
 
     public static Group createHitMark() {
-        Circle body = new Circle(CELL_SIZE / 2.0, CELL_SIZE / 2.0, CELL_SIZE / 4.0);
-        body.setFill(Color.web("#2b2b2b"));
 
-        Polygon spark = new Polygon(
-                CELL_SIZE / 2.0, 4,
-                CELL_SIZE / 2.0 + 6, CELL_SIZE / 2.0 - 6,
-                CELL_SIZE / 2.0 - 6, CELL_SIZE / 2.0 - 6
-        );
-        spark.setFill(Color.ORANGE);
+        Circle c = new Circle(
+                CELL_SIZE/2,
+                CELL_SIZE/2,
+                CELL_SIZE/4);
 
-        return new Group(body, spark);
+        c.setFill(Color.ORANGE);
+        c.setStroke(Color.BLACK);
+
+        return new Group(c);
     }
 
     public static Group createSunkMark() {
-        Circle body = new Circle(CELL_SIZE / 2.0, CELL_SIZE / 2.0, CELL_SIZE / 2.6);
-        body.setFill(Color.web("#1a1a1a"));
 
-        Polygon flame = new Polygon(
-                CELL_SIZE / 2.0, 2,
-                CELL_SIZE / 2.0 + 10, CELL_SIZE / 2.0,
-                CELL_SIZE / 2.0, CELL_SIZE - 2,
-                CELL_SIZE / 2.0 - 10, CELL_SIZE / 2.0
-        );
-        flame.setFill(Color.ORANGERED);
+        Circle c = new Circle(
+                CELL_SIZE/2,
+                CELL_SIZE/2,
+                CELL_SIZE/3);
 
-        return new Group(body, flame);
+        c.setFill(Color.RED);
+        c.setStroke(Color.BLACK);
+
+        Line l1 = new Line(8,8,CELL_SIZE-8,CELL_SIZE-8);
+        Line l2 = new Line(CELL_SIZE-8,8,8,CELL_SIZE-8);
+
+        l1.setStroke(Color.BLACK);
+        l2.setStroke(Color.BLACK);
+
+        l1.setStrokeWidth(2);
+        l2.setStrokeWidth(2);
+
+        return new Group(c,l1,l2);
     }
+
 }

@@ -64,7 +64,12 @@ public class GameController implements CellInteractionListener, BoardListener {
 
     @Override
     public void onCellChanged(Cell cell) {
-        repaintCell(positionCells[cell.getRow()][cell.getColumn()], cell.getState());
+        Platform.runLater(() ->
+                repaintCell(
+                        positionCells[cell.getRow()][cell.getColumn()],
+                        cell.getState()
+                )
+        );
     }
 
     @Override
@@ -163,10 +168,31 @@ public class GameController implements CellInteractionListener, BoardListener {
     }
 
     private void paintOwnFleet() {
+
         for (Ship ship : model.getHuman().getBoard().getFleet()) {
-            Cell firstCell = ship.getOccupiedCells().get(0);
-            positionCells[firstCell.getRow()][firstCell.getColumn()].getChildren()
-                    .add(ShipShapeFactory.createShip(ship.getType(), ship.getOrientation()));
+
+            int size = ship.getOccupiedCells().size();
+
+            for (int i = 0; i < size; i++) {
+
+                Cell cell = ship.getOccupiedCells().get(i);
+
+                ShipShapeFactory.SegmentType segment;
+
+                if (size == 1) {
+                    segment = ShipShapeFactory.SegmentType.SINGLE;
+                } else if (i == 0) {
+                    segment = ShipShapeFactory.SegmentType.HEAD;
+                } else if (i == size - 1) {
+                    segment = ShipShapeFactory.SegmentType.TAIL;
+                } else {
+                    segment = ShipShapeFactory.SegmentType.BODY;
+                }
+
+                positionCells[cell.getRow()][cell.getColumn()]
+                        .getChildren()
+                        .add(ShipShapeFactory.createShipSegment(segment, ship.getOrientation()));
+            }
         }
     }
 
@@ -230,14 +256,43 @@ public class GameController implements CellInteractionListener, BoardListener {
 
     @FXML
     private void handleViewMachineBoard() {
+
         Stage popup = new Stage();
+
         GridPane verificationGrid = new GridPane();
-        StackPane[][] verificationCells = BoardGridBuilder.build(verificationGrid, new ReadOnlyListener());
+
+        StackPane[][] verificationCells =
+                BoardGridBuilder.build(verificationGrid, new ReadOnlyListener());
 
         for (Ship ship : model.getMachine().getBoard().getFleet()) {
-            Cell firstCell = ship.getOccupiedCells().get(0);
-            verificationCells[firstCell.getRow()][firstCell.getColumn()].getChildren()
-                    .add(ShipShapeFactory.createShip(ship.getType(), ship.getOrientation()));
+
+            int size = ship.getOccupiedCells().size();
+
+            for (int i = 0; i < size; i++) {
+
+                Cell cell = ship.getOccupiedCells().get(i);
+
+                ShipShapeFactory.SegmentType segment;
+
+                if (size == 1) {
+                    segment = ShipShapeFactory.SegmentType.SINGLE;
+                } else if (i == 0) {
+                    segment = ShipShapeFactory.SegmentType.HEAD;
+                } else if (i == size - 1) {
+                    segment = ShipShapeFactory.SegmentType.TAIL;
+                } else {
+                    segment = ShipShapeFactory.SegmentType.BODY;
+                }
+
+                verificationCells[cell.getRow()][cell.getColumn()]
+                        .getChildren()
+                        .add(
+                                ShipShapeFactory.createShipSegment(
+                                        segment,
+                                        ship.getOrientation()
+                                )
+                        );
+            }
         }
 
         popup.setTitle("Tablero de la maquina (solo verificacion)");

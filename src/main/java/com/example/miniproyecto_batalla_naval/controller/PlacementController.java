@@ -118,9 +118,34 @@ public class PlacementController implements CellInteractionListener {
     }
 
     private void paintShip(Ship ship) {
-        Cell firstCell = ship.getOccupiedCells().get(0);
-        cellPanes[firstCell.getRow()][firstCell.getColumn()].getChildren()
-                .add(ShipShapeFactory.createShip(ship.getType(), ship.getOrientation()));
+
+        int size = ship.getOccupiedCells().size();
+
+        for (int i = 0; i < size; i++) {
+
+            Cell cell = ship.getOccupiedCells().get(i);
+
+            ShipShapeFactory.SegmentType segment;
+
+            if (size == 1) {
+                segment = ShipShapeFactory.SegmentType.SINGLE;
+            } else if (i == 0) {
+                segment = ShipShapeFactory.SegmentType.HEAD;
+            } else if (i == size - 1) {
+                segment = ShipShapeFactory.SegmentType.TAIL;
+            } else {
+                segment = ShipShapeFactory.SegmentType.BODY;
+            }
+
+            cellPanes[cell.getRow()][cell.getColumn()]
+                    .getChildren()
+                    .add(
+                            ShipShapeFactory.createShipSegment(
+                                    segment,
+                                    ship.getOrientation()
+                            )
+                    );
+        }
     }
 
     private void updateCurrentShipLabel() {

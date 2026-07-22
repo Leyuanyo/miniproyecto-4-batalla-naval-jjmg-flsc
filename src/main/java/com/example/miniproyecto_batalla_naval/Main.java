@@ -13,8 +13,4 @@ public class Main extends Application {
         stage.setTitle("Batalla Naval");
         stage.show();
     }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

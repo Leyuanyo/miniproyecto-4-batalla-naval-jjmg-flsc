@@ -1,3 +1,0 @@
-nickname=a
-shipsSunkByHuman=0
-shipsSunkByMachine=1

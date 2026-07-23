@@ -1,0 +1,14 @@
+module:com.example.miniproyecto_batalla_naval
+com.example.miniproyecto_batalla_naval
+com.example.miniproyecto_batalla_naval.controller
+com.example.miniproyecto_batalla_naval.controller.adapter
+com.example.miniproyecto_batalla_naval.exceptions
+com.example.miniproyecto_batalla_naval.model
+com.example.miniproyecto_batalla_naval.model.board
+com.example.miniproyecto_batalla_naval.model.interfaces
+com.example.miniproyecto_batalla_naval.model.player
+com.example.miniproyecto_batalla_naval.model.ships
+com.example.miniproyecto_batalla_naval.patterns
+com.example.miniproyecto_batalla_naval.persistence
+com.example.miniproyecto_batalla_naval.util
+com.example.miniproyecto_batalla_naval.view

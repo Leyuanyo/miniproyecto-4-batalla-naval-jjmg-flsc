@@ -10,11 +10,34 @@ import com.example.miniproyecto_batalla_naval.model.ships.Submarine;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Factory class responsible for creating ships used in the
+ * Battleship game.
+ *
+ * This utility class centralizes the creation of individual
+ * ship instances and complete fleets, following the Factory
+ * design pattern. It cannot be instantiated.
+ *
+ * @author Juan José Morera Gómez
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ * @since 1.0
+ */
 public final class ShipFactory {
 
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private ShipFactory() {
     }
 
+    /**
+     * Creates a ship corresponding to the specified type.
+     *
+     * @param type the type of ship to create
+     * @return a new ship instance of the requested type
+     * @throws IllegalArgumentException if the ship type is unknown
+     */
     public static Ship create(ShipType type) {
         switch (type) {
             case AIRCRAFT_CARRIER:
@@ -30,6 +53,14 @@ public final class ShipFactory {
         }
     }
 
+    /**
+     * Creates the complete fleet used in a Battleship match.
+     *
+     * The generated fleet contains one aircraft carrier,
+     * two submarines, three destroyers, and four frigates.
+     *
+     * @return a list containing the complete fleet
+     */
     public static List<Ship> createFullFleet() {
         List<Ship> fleet = new ArrayList<>();
         fleet.add(create(ShipType.AIRCRAFT_CARRIER));

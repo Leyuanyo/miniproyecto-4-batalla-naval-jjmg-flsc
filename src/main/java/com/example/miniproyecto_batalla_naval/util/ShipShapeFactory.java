@@ -8,20 +8,55 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Utility class responsible for creating all graphical elements
+ * used throughout the Battleship game.
+ *
+ * @author Juan José Morera Gómez
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ * @since 1.0
+ */
 public final class ShipShapeFactory {
 
+    /**
+     * Default size, in pixels, used for every board cell.
+     */
     public static final double CELL_SIZE = 36;
 
+    /**
+     * Represents the different graphical segments
+     * that compose a ship.
+     */
     public enum SegmentType {
+
+        /** Represents a ship consisting of a single cell. */
         SINGLE,
+
+        /** Represents the front segment of a ship. */
         HEAD,
+
+        /** Represents the middle segment of a ship. */
         BODY,
+
+        /** Represents the rear segment of a ship. */
         TAIL
     }
 
+    /**
+     * Prevents instantiation of this utility class.
+     */
     private ShipShapeFactory() {
     }
 
+    /**
+     * Creates the graphical representation of a ship segment
+     * according to its type and orientation.
+     *
+     * @param segment the type of ship segment to create
+     * @param orientation the orientation of the ship
+     * @return a JavaFX group representing the requested ship segment
+     */
     public static Group createShipSegment(
             SegmentType segment,
             Orientation orientation) {
@@ -158,6 +193,12 @@ public final class ShipShapeFactory {
         return group;
     }
 
+    /**
+     * Creates the graphical marker used to represent
+     * a shot that landed on water.
+     *
+     * @return a JavaFX group representing a water mark
+     */
     public static Group createWaterMark() {
 
         Line l1 = new Line(6,6,CELL_SIZE-6,CELL_SIZE-6);
@@ -172,6 +213,12 @@ public final class ShipShapeFactory {
         return new Group(l1,l2);
     }
 
+    /**
+     * Creates the graphical marker used to represent
+     * a successful hit on a ship.
+     *
+     * @return a JavaFX group representing a hit mark
+     */
     public static Group createHitMark() {
 
         Circle c = new Circle(
@@ -185,6 +232,12 @@ public final class ShipShapeFactory {
         return new Group(c);
     }
 
+    /**
+     * Creates the graphical marker used to represent
+     * a sunk ship.
+     *
+     * @return a JavaFX group representing a sunk mark
+     */
     public static Group createSunkMark() {
 
         Circle c = new Circle(
@@ -207,6 +260,13 @@ public final class ShipShapeFactory {
         return new Group(c,l1,l2);
     }
 
+    /**
+     * Creates the graphical preview displayed while
+     * placing a ship on the board.
+     *
+     * @param valid indicates whether the placement is valid
+     * @return a rectangle representing the placement preview
+     */
     public static Rectangle createGhostCell(boolean valid) {
         Rectangle rectangle = new Rectangle(CELL_SIZE - 4, CELL_SIZE - 4);
         rectangle.setArcWidth(10);

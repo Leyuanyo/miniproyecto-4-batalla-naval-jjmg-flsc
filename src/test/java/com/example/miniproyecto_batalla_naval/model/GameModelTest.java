@@ -12,8 +12,24 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for the {@link GameModel} class.
+ *
+ * This test suite verifies the core game state behavior,
+ * including turn management, game initialization, and
+ * game-over detection when a player's fleet has been sunk.
+ *
+ * @author Juan José Morera Gómez
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ * @since 1.0
+ */
 class GameModelTest {
 
+    /**
+     * Verifies that a newly created game starts
+     * with the human player's turn.
+     */
     @Test
     void gameStartsWithHumanTurn() {
         Player human = new Player("Juan", new Board());
@@ -23,6 +39,10 @@ class GameModelTest {
         assertTrue(model.isHumanTurn());
     }
 
+    /**
+     * Verifies that a newly created game is not
+     * considered finished while both fleets remain intact.
+     */
     @Test
     void gameIsNotOverWithFreshBoards() {
         Player human = new Player("Juan", new Board());
@@ -32,6 +52,10 @@ class GameModelTest {
         assertFalse(model.isGameOver());
     }
 
+    /**
+     * Verifies that the active turn can be changed
+     * from the human player to the machine player.
+     */
     @Test
     void turnCanBeToggled() {
         GameModel model = new GameModel(new Player("Juan"), new Machine(new RandomShotStrategy()));
@@ -41,6 +65,13 @@ class GameModelTest {
         assertFalse(model.isHumanTurn());
     }
 
+    /**
+     * Verifies that the game is considered over
+     * when the human player's entire fleet has been sunk.
+     *
+     * @throws Exception if an error occurs while placing
+     *                   or shooting the test ship
+     */
     @Test
     void gameIsOverWhenHumanFleetIsFullySunk() throws Exception {
         Player human = new Player("Juan");

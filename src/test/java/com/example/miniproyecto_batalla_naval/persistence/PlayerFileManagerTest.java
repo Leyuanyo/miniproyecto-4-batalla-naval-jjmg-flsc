@@ -9,19 +9,41 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Note: {@link PlayerFileManager} always writes to a fixed "saves/player.txt"
- * path relative to the working directory, so this test creates a real file
- * on disk and removes it afterward.
+ * Unit tests for the {@link PlayerFileManager} class.
+ *
+ * This test suite verifies that player information is correctly
+ * stored and retrieved from the persistence file, ensuring that
+ * saved statistics remain consistent between save and load operations.
+ *
+ * @author Juan José Morera Gómez
+ * @author Frank Leonardo Silva Castillo
+ * @version 1.0
+ * @since 1.0
  */
 class PlayerFileManagerTest {
 
+    /**
+     * File used by the player file manager
+     * during the execution of the tests.
+     */
     private static final File SAVE_FILE = new File("saves/player.txt");
 
+    /**
+     * Deletes the generated player data file
+     * after each test to ensure that every test
+     * starts with a clean environment.
+     */
     @AfterEach
     void cleanUp() {
         SAVE_FILE.delete();
     }
 
+    /**
+     * Verifies that player information saved to disk
+     * can be successfully loaded back while preserving
+     * the nickname and the number of ships sunk by
+     * both the human player and the machine.
+     */
     @Test
     void savedDataCanBeReadBack() {
         PlayerFileManager manager = new PlayerFileManager();

@@ -2,6 +2,8 @@ package com.example.miniproyecto_batalla_naval.controller;
 
 import com.example.miniproyecto_batalla_naval.controller.adapter.CellInteractionListener;
 import com.example.miniproyecto_batalla_naval.exceptions.InvalidShipPlacementException;
+import com.example.miniproyecto_batalla_naval.controller.adapter.RotationListener;
+import com.example.miniproyecto_batalla_naval.controller.adapter.KeyRotationAdapter;
 import com.example.miniproyecto_batalla_naval.model.board.Board;
 import com.example.miniproyecto_batalla_naval.model.board.Cell;
 import com.example.miniproyecto_batalla_naval.model.GameModel;
@@ -28,7 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class PlacementController implements CellInteractionListener {
+public class PlacementController implements CellInteractionListener, RotationListener {
 
     @FXML
     private GridPane positionBoardGrid;
@@ -59,7 +61,7 @@ public class PlacementController implements CellInteractionListener {
         attachHoverPreview();
         updateCurrentShipLabel();
         startGameButton.setDisable(true);
-        instructionsLabel.setText("Click izquierdo: coloca. Click derecho: rota. Empieza por el portaaviones.");
+        instructionsLabel.setText("Click izquierdo: coloca. Click derecho o Espacio: rota.");
     }
 
     private void loadPendingShips() {
@@ -95,6 +97,11 @@ public class PlacementController implements CellInteractionListener {
         GameModel model = new GameModel(human, machine);
 
         GameStage.goToGame(model);
+    }
+
+    @Override
+    public void onRotateRequested() {
+        handleRotate();
     }
 
     @Override

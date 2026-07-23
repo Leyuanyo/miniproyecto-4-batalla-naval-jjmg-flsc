@@ -215,6 +215,21 @@ public class PlacementController implements CellInteractionListener {
 
     private void updateCurrentShipLabel() {
         ShipType next = pendingShips.peek();
-        currentShipLabel.setText(next == null ? "-" : next.name());
+        currentShipLabel.setText(next == null ? "-" : translateShipType(next));
+    }
+
+    private String translateShipType(ShipType type) {
+        switch (type) {
+            case AIRCRAFT_CARRIER:
+                return "Portaaviones";
+            case SUBMARINE:
+                return "Submarino";
+            case DESTROYER:
+                return "Destructor";
+            case FRIGATE:
+                return "Fragata";
+            default:
+                return type.name();
+        }
     }
 }

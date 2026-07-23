@@ -1,5 +1,6 @@
 package com.example.miniproyecto_batalla_naval.controller;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.example.miniproyecto_batalla_naval.controller.adapter.CellInteractionListener;
 import com.example.miniproyecto_batalla_naval.exceptions.CellAlreadyShotException;
 import com.example.miniproyecto_batalla_naval.model.GameModel;
@@ -17,11 +18,15 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class GameController implements CellInteractionListener, BoardListener {
+
+    @FXML
+    private Label timeLabel;
 
     @FXML
     private GridPane positionBoardGrid;
@@ -40,6 +45,8 @@ public class GameController implements CellInteractionListener, BoardListener {
     private StackPane[][] mainCells;
     private final GameSerializer gameSerializer = new GameSerializer();
     private final PlayerFileManager playerFileManager = new PlayerFileManager();
+    private final AtomicBoolean gameTimerRunning = new AtomicBoolean(true);
+    private int elapsedSeconds = 0;
 
     public void startGame(GameModel model) {
         this.model = model;
@@ -47,6 +54,7 @@ public class GameController implements CellInteractionListener, BoardListener {
         paintOwnFleet();
         updateTurnLabel();
         autosave();
+        startGameTimer();
     }
 
     public void resumeGame(GameModel savedModel) {
@@ -59,6 +67,7 @@ public class GameController implements CellInteractionListener, BoardListener {
             messageLabel.setText("Reanudando turno de la maquina...");
             runMachineTurn();
         }
+        startGameTimer();
     }
 
     private void setupBoards() {
@@ -119,6 +128,23 @@ public class GameController implements CellInteractionListener, BoardListener {
         // The main board does not use right-click during gameplay.
     }
 
+    private void startGameTimer() {
+        Thread timerThread = new Thread(() -> {
+            while (gameTimerRunning.get()) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+                elapsedSeconds++;
+                Platform.runLater(() -> timeLabel.setText("Tiempo: " + elapsedSeconds + "s"));
+            }
+        }, "game-timer");
+        timerThread.setDaemon(true);
+        timerThread.start();
+    }
+
     private void runMachineTurn() {
         MachineTurnRunner runner = new MachineTurnRunner(model, this::onMachineShotResolved);
         Thread thread = new Thread(runner, "machine-turn");
@@ -166,6 +192,8 @@ public class GameController implements CellInteractionListener, BoardListener {
 
                 mainBoardGrid.setDisable(true);
                 positionBoardGrid.setDisable(true);
+                gameTimerRunning.set(false);
+
 
                 break;
         }
@@ -319,6 +347,13 @@ public class GameController implements CellInteractionListener, BoardListener {
 
         popup.setTitle("Tablero de la maquina (solo verificacion)");
         popup.setScene(new Scene(verificationGrid));
+
+        var iconStream = getClass().getResourceAsStream(
+                "/com/example/miniproyecto_batalla_naval/images/cheatImage.png");
+        if (iconStream != null) {
+            popup.getIcons().add(new Image(iconStream));
+        }
+
         popup.show();
     }
 

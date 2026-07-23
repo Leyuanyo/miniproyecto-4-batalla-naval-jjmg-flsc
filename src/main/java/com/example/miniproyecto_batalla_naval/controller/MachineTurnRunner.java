@@ -6,19 +6,8 @@ import com.example.miniproyecto_batalla_naval.model.player.Machine;
 import com.example.miniproyecto_batalla_naval.model.board.Board;
 import com.example.miniproyecto_batalla_naval.model.board.ShotResult;
 
-/**
- * Runs the machine's turn on a background thread so the UI stays responsive
- * and the short "thinking" delay is visible. Results are handed back via
- * {@link MachineShotCallback}; the caller is responsible for hopping back
- * onto the JavaFX Application Thread (with {@code Platform.runLater}) before
- * touching the scene graph.
- */
 public class MachineTurnRunner implements Runnable {
 
-    /**
-     * Functional callback invoked once the machine's shot has been
-     * resolved.
-     */
     public interface MachineShotCallback {
         void onShotResolved(int row, int column, ShotResult result);
     }
